@@ -73,6 +73,68 @@ InfoNavComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineC
 
 /***/ }),
 
+/***/ "1N6X":
+/*!*********************************************************************************!*\
+  !*** ./src/app/component/view/konto-uzytkownika/konto-uzytkownika.component.ts ***!
+  \*********************************************************************************/
+/*! exports provided: KontoUzytkownikaComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KontoUzytkownikaComponent", function() { return KontoUzytkownikaComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var src_app_service_user_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/service/user.service */ "Ouoq");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "tyNb");
+
+
+
+
+
+class KontoUzytkownikaComponent {
+    constructor(userService, router) {
+        this.userService = userService;
+        this.router = router;
+    }
+    ngOnInit() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            this.name = yield this.userService.getUserName();
+            console.log(this.name);
+        });
+    }
+    logOut() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            yield this.userService.logout();
+            this.router.navigate(["/login"]);
+        });
+    }
+}
+KontoUzytkownikaComponent.ɵfac = function KontoUzytkownikaComponent_Factory(t) { return new (t || KontoUzytkownikaComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_service_user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"])); };
+KontoUzytkownikaComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: KontoUzytkownikaComponent, selectors: [["app-konto-uzytkownika"]], decls: 4, vars: 1, consts: [[1, "btn", "btn-danger", 3, "click"]], template: function KontoUzytkownikaComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "p");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](2, "button", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function KontoUzytkownikaComponent_Template_button_click_2_listener() { return ctx.logOut(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](3, "Log out");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    } if (rf & 2) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtextInterpolate1"]("Jeste\u015B zalogowany ", ctx.name, "");
+    } }, styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJrb250by11enl0a293bmlrYS5jb21wb25lbnQuc2NzcyJ9 */"] });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](KontoUzytkownikaComponent, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"],
+        args: [{
+                selector: 'app-konto-uzytkownika',
+                templateUrl: './konto-uzytkownika.component.html',
+                styleUrls: ['./konto-uzytkownika.component.scss']
+            }]
+    }], function () { return [{ type: src_app_service_user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] }]; }, null); })();
+
+
+/***/ }),
+
 /***/ "1YpU":
 /*!***************************************************************************!*\
   !*** ./src/app/component/view/page-not-found/page-not-found.component.ts ***!
@@ -210,6 +272,64 @@ const environment = {
 
 /***/ }),
 
+/***/ "DNdf":
+/*!*************************************************************************!*\
+  !*** ./src/app/component/widget/google-login/google-login.component.ts ***!
+  \*************************************************************************/
+/*! exports provided: GoogleLoginComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GoogleLoginComponent", function() { return GoogleLoginComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var src_app_service_user_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/service/user.service */ "Ouoq");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "tyNb");
+
+
+
+
+
+//declare var gapi: any;
+class GoogleLoginComponent {
+    constructor(userService, router) {
+        this.userService = userService;
+        this.router = router;
+    }
+    ngOnInit() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+        });
+    }
+    authenticate() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            try {
+                yield this.userService.login("google");
+                this.router.navigate(["/konto_uzytkownika"]);
+            }
+            catch (error) { }
+        });
+    }
+}
+GoogleLoginComponent.ɵfac = function GoogleLoginComponent_Factory(t) { return new (t || GoogleLoginComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_service_user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"])); };
+GoogleLoginComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: GoogleLoginComponent, selectors: [["app-google-login"]], decls: 2, vars: 0, consts: [[1, "btn", "btn-danger", "w-100", 3, "click"]], template: function GoogleLoginComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "button", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function GoogleLoginComponent_Template_button_click_0_listener() { return ctx.authenticate(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](1, "Via Google");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+    } }, styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJnb29nbGUtbG9naW4uY29tcG9uZW50LnNjc3MifQ== */"] });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](GoogleLoginComponent, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"],
+        args: [{
+                selector: 'app-google-login',
+                templateUrl: './google-login.component.html',
+                styleUrls: ['./google-login.component.scss']
+            }]
+    }], function () { return [{ type: src_app_service_user_service__WEBPACK_IMPORTED_MODULE_2__["UserService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"] }]; }, null); })();
+
+
+/***/ }),
+
 /***/ "Ouoq":
 /*!*****************************************!*\
   !*** ./src/app/service/user.service.ts ***!
@@ -220,11 +340,15 @@ const environment = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserService", function() { return UserService; });
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "qCKp");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
-/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/environments/environment */ "AytR");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "qCKp");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
+/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/environments/environment */ "AytR");
+/* harmony import */ var _google_user_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./google-user.service */ "SAzt");
+
+
 
 
 
@@ -233,40 +357,134 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class UserService {
-    constructor(http) {
+    constructor(http, gu) {
         this.http = http;
+        this.gu = gu;
+        this.loggedMsg = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"](this.loggedStatus);
+    }
+    get loggedStatus() {
+        let logged = sessionStorage.getItem("logged");
+        console.log("logged status: " + logged);
+        return logged === null ? "" : logged;
+    }
+    set loggedStatus(status) {
+        sessionStorage.setItem("logged", status);
+        this.loggedMsg.next(status);
+        console.log("change status for: " + status);
+    }
+    isLogged() {
+        return this.loggedStatus.length > 0;
     }
     handleError(error) {
         if (error.error instanceof ErrorEvent) {
             //client side error like lost connection
             console.error('Error: ', error.error.message);
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["throwError"])('<strong>Problem z połączeniem.</strong> Sprawdź swoje połączenie z internetem, lub sprubój ponownie później.');
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])('<strong>Problem z połączeniem.</strong> Sprawdź swoje połączenie z internetem, lub sprubój ponownie później.');
         }
         else {
             //backend returned error
             console.error(`Backend returned code ${error.status}\n body was: ${error.error}`);
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["throwError"])('<strong>Wystąpił problem.</strong> Spróbuj ponownie później');
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])('<strong>Wystąpił problem.</strong> Spróbuj ponownie później');
         }
     }
     register(user) {
-        let url = src_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].endpoint + "/user/register";
+        let url = src_environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].endpoint + "/user/register";
         const httpOptions = {
-            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpHeaders"]({
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({
                 'Content-Type': 'application/json'
             })
         };
         return this.http.post(url, user, httpOptions)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(this.handleError));
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError));
+    }
+    loginParser(ua) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            try {
+                switch (ua) {
+                    case "google":
+                        yield this.gu.login();
+                        this.userAccount = this.gu;
+                        break;
+                    default:
+                        throw new Error("wrong login argument: " + ua);
+                }
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    //perform initialization, throw error if not authorized
+    authentification() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            if (!this.isLogged())
+                throw new Error("User is not logged");
+            if (this.userAccount == undefined) {
+                console.log("relog");
+                yield this.relogin(this.loggedStatus);
+            }
+        });
+    }
+    //kinda aliases loginParser
+    relogin(ua) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            try {
+                yield this.loginParser(ua);
+            }
+            catch (error) {
+                console.error(error);
+                throw error;
+            }
+        });
+    }
+    login(ua) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            try {
+                yield this.loginParser(ua);
+                this.loggedStatus = ua;
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
+        });
+    }
+    logout() {
+        var _a;
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            try {
+                yield this.authentification();
+                yield ((_a = this.userAccount) === null || _a === void 0 ? void 0 : _a.logout());
+                this.userAccount = undefined;
+                this.loggedStatus = "";
+                console.log("log out");
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    getUserName() {
+        var _a;
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            try {
+                yield this.authentification();
+                return (_a = this.userAccount) === null || _a === void 0 ? void 0 : _a.getName();
+            }
+            catch (error) {
+                throw error;
+            }
+        });
     }
 }
-UserService.ɵfac = function UserService_Factory(t) { return new (t || UserService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpClient"])); };
-UserService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: UserService, factory: UserService.ɵfac, providedIn: 'root' });
-/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](UserService, [{
-        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"],
+UserService.ɵfac = function UserService_Factory(t) { return new (t || UserService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_google_user_service__WEBPACK_IMPORTED_MODULE_6__["GoogleUserService"])); };
+UserService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: UserService, factory: UserService.ɵfac, providedIn: 'root' });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵsetClassMetadata"](UserService, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"],
         args: [{
                 providedIn: 'root'
             }]
-    }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_0__["HttpClient"] }]; }, null); })();
+    }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"] }, { type: _google_user_service__WEBPACK_IMPORTED_MODULE_6__["GoogleUserService"] }]; }, null); })();
 
 
 /***/ }),
@@ -347,6 +565,95 @@ PrzesylkiZagraniczneComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__
 
 /***/ }),
 
+/***/ "SAzt":
+/*!************************************************!*\
+  !*** ./src/app/service/google-user.service.ts ***!
+  \************************************************/
+/*! exports provided: GoogleUserService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GoogleUserService", function() { return GoogleUserService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var secret_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! secret/data */ "ntTL");
+
+
+
+
+class GoogleUserService {
+    constructor() {
+        this.gapiSetup = false; //marks if gapi library has been loaded
+        this.error = "";
+    }
+    getName() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            if (!this.gapiSetup) {
+                yield this.initGoogleAuth();
+            }
+            return this.user.getBasicProfile().getName();
+        });
+    }
+    logout() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            if (!this.gapiSetup) {
+                yield this.initGoogleAuth();
+            }
+            this.authInstance.signOut();
+            this.authInstance.disconnect();
+        });
+    }
+    //if user is not logged - log in
+    login() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            if (!this.gapiSetup) {
+                yield this.initGoogleAuth();
+            }
+            //check if user is signed in (no double login on restarts)
+            //for relogin
+            if (this.authInstance.isSignedIn.get()) {
+                this.user = this.authInstance.currentUser.get();
+                return;
+            }
+            return this.authInstance.signIn().then((user) => {
+                this.user = user;
+            }, 
+            //wywołany m. in. gdy wyskakujące okienko zostanie zamknięte przez użytkownika
+            (error) => {
+                this.error = error;
+                throw error;
+            });
+        });
+    }
+    initGoogleAuth() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            console.log("init google auth");
+            return new Promise((resolve) => {
+                gapi.load('auth2', resolve);
+            }).then(() => Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+                yield gapi.auth2.init({
+                    client_id: secret_data__WEBPACK_IMPORTED_MODULE_2__["CLIENT_ID"],
+                }).then((auth) => {
+                    this.gapiSetup = true;
+                    this.authInstance = auth;
+                });
+            }));
+        });
+    }
+}
+GoogleUserService.ɵfac = function GoogleUserService_Factory(t) { return new (t || GoogleUserService)(); };
+GoogleUserService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjectable"]({ token: GoogleUserService, factory: GoogleUserService.ɵfac, providedIn: 'root' });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](GoogleUserService, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"],
+        args: [{
+                providedIn: 'root'
+            }]
+    }], function () { return []; }, null); })();
+
+
+/***/ }),
+
 /***/ "Sqrs":
 /*!*********************************************************!*\
   !*** ./src/app/component/view/login/login.component.ts ***!
@@ -359,7 +666,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoginComponent", function() { return LoginComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _widget_google_login_google_login_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../widget/google-login/google-login.component */ "DNdf");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "tyNb");
+
 
 
 
@@ -375,22 +684,29 @@ class LoginComponent {
     }
     ngOnInit() {
     }
+    onSubmit() {
+        let password = this.form.get("password");
+        let login = this.form.get("login");
+    }
 }
 LoginComponent.ɵfac = function LoginComponent_Factory(t) { return new (t || LoginComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"])); };
-LoginComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: LoginComponent, selectors: [["app-login"]], decls: 7, vars: 1, consts: [[1, "container", "g-form", 3, "formGroup"], ["type", "text", "placeholder", "Login", "formControlName", "login", "required", "", 1, "form-control", "mb-1"], ["type", "password", "placeholder", "Has\u0142o", "formControlName", "password", "required", "", 1, "form-control", "mb-2"], ["type", "submit", 1, "btn", "btn-success", "w-100", "mb-2"], ["routerLink", "/register", 1, "btn", "btn-primary", "w-100"]], template: function LoginComponent_Template(rf, ctx) { if (rf & 1) {
+LoginComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: LoginComponent, selectors: [["app-login"]], decls: 9, vars: 1, consts: [[1, "container", "g-form", 3, "formGroup"], ["type", "text", "placeholder", "Login", "formControlName", "login", "required", "", 1, "form-control", "mb-1"], ["type", "password", "placeholder", "Has\u0142o", "formControlName", "password", "required", "", 1, "form-control", "mb-2"], ["type", "submit", 1, "btn", "btn-success", "w-100", "mb-2"], [1, "w-100", "mb-2"], ["routerLink", "/register", 1, "btn", "btn-primary", "w-100"]], template: function LoginComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "form", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](1, "input", 1);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](2, "input", 2);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "button", 3);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, "Log in");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "a", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](6, "Register");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "div", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](6, "app-google-login");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](7, "a", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](8, "Register");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
     } if (rf & 2) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("formGroup", ctx.form);
-    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_y"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControlName"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["RequiredValidator"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["RouterLinkWithHref"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJsb2dpbi5jb21wb25lbnQuc2NzcyJ9 */"] });
+    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_y"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControlName"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["RequiredValidator"], _widget_google_login_google_login_component__WEBPACK_IMPORTED_MODULE_2__["GoogleLoginComponent"], _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouterLinkWithHref"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJsb2dpbi5jb21wb25lbnQuc2NzcyJ9 */"] });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](LoginComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
@@ -545,6 +861,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _component_view_login_login_component__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./component/view/login/login.component */ "Sqrs");
 /* harmony import */ var _component_view_home_home_component__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./component/view/home/home.component */ "WYsb");
 /* harmony import */ var _component_view_page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./component/view/page-not-found/page-not-found.component */ "1YpU");
+/* harmony import */ var _component_widget_google_login_google_login_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./component/widget/google-login/google-login.component */ "DNdf");
+/* harmony import */ var _component_view_konto_uzytkownika_konto_uzytkownika_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./component/view/konto-uzytkownika/konto-uzytkownika.component */ "1N6X");
+
+
 
 
 
@@ -587,7 +907,9 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector
         _component_view_register_register_component__WEBPACK_IMPORTED_MODULE_15__["RegisterComponent"],
         _component_view_login_login_component__WEBPACK_IMPORTED_MODULE_16__["LoginComponent"],
         _component_view_home_home_component__WEBPACK_IMPORTED_MODULE_17__["HomeComponent"],
-        _component_view_page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_18__["PageNotFoundComponent"]], imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
+        _component_view_page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_18__["PageNotFoundComponent"],
+        _component_widget_google_login_google_login_component__WEBPACK_IMPORTED_MODULE_19__["GoogleLoginComponent"],
+        _component_view_konto_uzytkownika_konto_uzytkownika_component__WEBPACK_IMPORTED_MODULE_20__["KontoUzytkownikaComponent"]], imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
         _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClientModule"],
         _app_routing_module__WEBPACK_IMPORTED_MODULE_4__["AppRoutingModule"],
         _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__["NgbModule"],
@@ -608,7 +930,9 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector
                     _component_view_register_register_component__WEBPACK_IMPORTED_MODULE_15__["RegisterComponent"],
                     _component_view_login_login_component__WEBPACK_IMPORTED_MODULE_16__["LoginComponent"],
                     _component_view_home_home_component__WEBPACK_IMPORTED_MODULE_17__["HomeComponent"],
-                    _component_view_page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_18__["PageNotFoundComponent"]
+                    _component_view_page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_18__["PageNotFoundComponent"],
+                    _component_widget_google_login_google_login_component__WEBPACK_IMPORTED_MODULE_19__["GoogleLoginComponent"],
+                    _component_view_konto_uzytkownika_konto_uzytkownika_component__WEBPACK_IMPORTED_MODULE_20__["KontoUzytkownikaComponent"]
                 ],
                 imports: [
                     _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -621,6 +945,97 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector
                 bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
             }]
     }], null, null); })();
+
+
+/***/ }),
+
+/***/ "bE47":
+/*!*****************************************!*\
+  !*** ./src/app/guard/antiauth.guard.ts ***!
+  \*****************************************/
+/*! exports provided: AntiauthGuard */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AntiauthGuard", function() { return AntiauthGuard; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var _service_user_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../service/user.service */ "Ouoq");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "tyNb");
+
+
+
+
+class AntiauthGuard {
+    constructor(userService, router) {
+        this.userService = userService;
+        this.router = router;
+    }
+    canActivate(route, state) {
+        return this.userService.isLogged() ? this.router.parseUrl('/konto_uzytkownika') : true;
+    }
+}
+AntiauthGuard.ɵfac = function AntiauthGuard_Factory(t) { return new (t || AntiauthGuard)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_service_user_service__WEBPACK_IMPORTED_MODULE_1__["UserService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"])); };
+AntiauthGuard.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: AntiauthGuard, factory: AntiauthGuard.ɵfac, providedIn: 'root' });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AntiauthGuard, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
+        args: [{
+                providedIn: 'root'
+            }]
+    }], function () { return [{ type: _service_user_service__WEBPACK_IMPORTED_MODULE_1__["UserService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] }]; }, null); })();
+
+
+/***/ }),
+
+/***/ "cT6d":
+/*!*************************************!*\
+  !*** ./src/app/guard/auth.guard.ts ***!
+  \*************************************/
+/*! exports provided: AuthGuard */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthGuard", function() { return AuthGuard; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var _service_user_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../service/user.service */ "Ouoq");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "tyNb");
+
+
+
+
+class AuthGuard {
+    constructor(userService, router) {
+        this.userService = userService;
+        this.router = router;
+    }
+    canActivate(route, state) {
+        return this.userService.isLogged() ? true : this.router.parseUrl('/login');
+    }
+}
+AuthGuard.ɵfac = function AuthGuard_Factory(t) { return new (t || AuthGuard)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_service_user_service__WEBPACK_IMPORTED_MODULE_1__["UserService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"])); };
+AuthGuard.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: AuthGuard, factory: AuthGuard.ɵfac, providedIn: 'root' });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](AuthGuard, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
+        args: [{
+                providedIn: 'root'
+            }]
+    }], function () { return [{ type: _service_user_service__WEBPACK_IMPORTED_MODULE_1__["UserService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] }]; }, null); })();
+
+
+/***/ }),
+
+/***/ "ntTL":
+/*!************************!*\
+  !*** ./secret/data.ts ***!
+  \************************/
+/*! exports provided: CLIENT_ID */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CLIENT_ID", function() { return CLIENT_ID; });
+const CLIENT_ID = "278590775600-1i8jaje4vr6dffnnbm4ro13kc6g0f0vs.apps.googleusercontent.com";
 
 
 /***/ }),
@@ -929,11 +1344,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _component_view_home_home_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./component/view/home/home.component */ "WYsb");
 /* harmony import */ var _component_view_informacje_o_firmie_informacje_o_firmie_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./component/view/informacje-o-firmie/informacje-o-firmie.component */ "2HNa");
 /* harmony import */ var _component_view_kontakt_kontakt_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./component/view/kontakt/kontakt.component */ "pAI0");
-/* harmony import */ var _component_view_login_login_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./component/view/login/login.component */ "Sqrs");
-/* harmony import */ var _component_view_page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./component/view/page-not-found/page-not-found.component */ "1YpU");
-/* harmony import */ var _component_view_przesylki_zagraniczne_przesylki_zagraniczne_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./component/view/przesylki-zagraniczne/przesylki-zagraniczne.component */ "S9zC");
-/* harmony import */ var _component_view_register_register_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./component/view/register/register.component */ "r9bT");
-/* harmony import */ var _component_view_regulamin_regulamin_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./component/view/regulamin/regulamin.component */ "AxgZ");
+/* harmony import */ var _component_view_konto_uzytkownika_konto_uzytkownika_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./component/view/konto-uzytkownika/konto-uzytkownika.component */ "1N6X");
+/* harmony import */ var _component_view_login_login_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./component/view/login/login.component */ "Sqrs");
+/* harmony import */ var _component_view_page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./component/view/page-not-found/page-not-found.component */ "1YpU");
+/* harmony import */ var _component_view_przesylki_zagraniczne_przesylki_zagraniczne_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./component/view/przesylki-zagraniczne/przesylki-zagraniczne.component */ "S9zC");
+/* harmony import */ var _component_view_register_register_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./component/view/register/register.component */ "r9bT");
+/* harmony import */ var _component_view_regulamin_regulamin_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./component/view/regulamin/regulamin.component */ "AxgZ");
+/* harmony import */ var _guard_antiauth_guard__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./guard/antiauth.guard */ "bE47");
+/* harmony import */ var _guard_auth_guard__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./guard/auth.guard */ "cT6d");
+
+
+
 
 
 
@@ -950,11 +1371,12 @@ const routes = [
     { path: '', component: _component_view_home_home_component__WEBPACK_IMPORTED_MODULE_2__["HomeComponent"] },
     { path: 'informacje_o_firmie', component: _component_view_informacje_o_firmie_informacje_o_firmie_component__WEBPACK_IMPORTED_MODULE_3__["InformacjeOFirmieComponent"] },
     { path: 'kontakt', component: _component_view_kontakt_kontakt_component__WEBPACK_IMPORTED_MODULE_4__["KontaktComponent"] },
-    { path: 'przesylki_zagraniczne', component: _component_view_przesylki_zagraniczne_przesylki_zagraniczne_component__WEBPACK_IMPORTED_MODULE_7__["PrzesylkiZagraniczneComponent"] },
-    { path: 'regulamin', component: _component_view_regulamin_regulamin_component__WEBPACK_IMPORTED_MODULE_9__["RegulaminComponent"] },
-    { path: 'login', component: _component_view_login_login_component__WEBPACK_IMPORTED_MODULE_5__["LoginComponent"] },
-    { path: 'register', component: _component_view_register_register_component__WEBPACK_IMPORTED_MODULE_8__["RegisterComponent"] },
-    { path: '**', component: _component_view_page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_6__["PageNotFoundComponent"] },
+    { path: 'przesylki_zagraniczne', component: _component_view_przesylki_zagraniczne_przesylki_zagraniczne_component__WEBPACK_IMPORTED_MODULE_8__["PrzesylkiZagraniczneComponent"] },
+    { path: 'regulamin', component: _component_view_regulamin_regulamin_component__WEBPACK_IMPORTED_MODULE_10__["RegulaminComponent"] },
+    { path: 'login', component: _component_view_login_login_component__WEBPACK_IMPORTED_MODULE_6__["LoginComponent"], canActivate: [_guard_antiauth_guard__WEBPACK_IMPORTED_MODULE_11__["AntiauthGuard"]] },
+    { path: 'register', component: _component_view_register_register_component__WEBPACK_IMPORTED_MODULE_9__["RegisterComponent"], canActivate: [_guard_antiauth_guard__WEBPACK_IMPORTED_MODULE_11__["AntiauthGuard"]] },
+    { path: 'konto_uzytkownika', component: _component_view_konto_uzytkownika_konto_uzytkownika_component__WEBPACK_IMPORTED_MODULE_5__["KontoUzytkownikaComponent"], canActivate: [_guard_auth_guard__WEBPACK_IMPORTED_MODULE_12__["AuthGuard"]] },
+    { path: '**', component: _component_view_page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_7__["PageNotFoundComponent"] },
 ];
 class AppRoutingModule {
 }

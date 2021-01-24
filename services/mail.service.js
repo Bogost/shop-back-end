@@ -8,6 +8,7 @@ module.exports = {
 	mixins: [Mailer],
 
 	settings: {
+		$secureSettings: ["transport.auth"],
 		// Sender default e-mail address
 		from: secrets.sender,
 		

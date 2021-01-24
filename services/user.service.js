@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const argon2 = require("argon2");
 const Str = require("@supercharge/strings");
 const { ServiceNotFoundError } = require("moleculer").Errors;
+const jwt = require('jsonwebtoken');
+const secrets = require("../secret/secrets");
 
 module.exports = {
     name: "user",
@@ -34,7 +36,6 @@ module.exports = {
                 login: "string|lowercase|max:32",
                 email: "email|normalize|max:64",
                 password: "string|min:8|max:64",
-                $$strict: true,
             },
             async handler(ctx){
                 try {
@@ -98,7 +99,6 @@ module.exports = {
             rest: "GET verify/:link",
             params: {
                 link: "string",
-                $$strict: true,
             },
             async handler(ctx) {
                 const account = await this.adapter.find({
@@ -113,6 +113,50 @@ module.exports = {
                     $unset: {link: ""},
                 });
                 return response;
+            }
+        },
+
+        login: {
+            rest: "POST login",
+            params: {
+                login: "string|lowercase|max:32",
+                password: "string|max:64",
+            },
+            async handler(ctx) {
+                const password = ctx.params.password;
+                const login = ctx.params.login;
+                const user = await this.adapter.find({
+                    query: {"login": login}
+                });
+                if(user.length === 0)
+                {
+                    return {
+                        action: "login",
+                        success: false,
+                        message: "wrong login"
+                    };
+                }
+                try {
+                    if (!await argon2.verify(user.password, password)) {
+                        return {
+                            action: "login",
+                            success: false,
+                            message: "wrong password"
+                        };
+                    }
+                } catch (err) {
+                    return {
+                        action: "login",
+                        success: false,
+                        message: "internal error"
+                    };
+                }
+                let token = jwt.sign({sub: login}, secrets.tokenSecret, {expiresIn: '1h'});
+                return {
+                    action: "login",
+                    success: true,
+                    message: token
+                };
             }
         }
     },

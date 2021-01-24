@@ -27,6 +27,7 @@
   "dependencies": {
     "@supercharge/strings": "^1.17.1",
     "argon2": "^0.27.1",
+    "jsonwebtoken": "^8.5.1",
     "minimist": "^1.2.5",
     "moleculer": "^0.14.10",
     "moleculer-db": "^0.8.11",
