@@ -258,7 +258,7 @@ __webpack_require__.r(__webpack_exports__);
 // The list of file replacements can be found in `angular.json`.
 const environment = {
     production: false,
-    endpoint: "https://localhost:3000/api",
+    endpoint: "/api",
 };
 /*
  * For easier debugging in development mode, you can import the following file
@@ -330,6 +330,99 @@ GoogleLoginComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdef
 
 /***/ }),
 
+/***/ "Mg0x":
+/*!*********************************************!*\
+  !*** ./src/app/service/our-user.service.ts ***!
+  \*********************************************/
+/*! exports provided: OurUserService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OurUserService", function() { return OurUserService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "qCKp");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
+/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/environments/environment */ "AytR");
+
+
+
+
+
+
+
+
+class OurUserService {
+    constructor(http) {
+        this.http = http;
+    }
+    getName() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            return "Alfred";
+        });
+    }
+    logout() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            sessionStorage.removeItem("access_token");
+        });
+    }
+    login(user) {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            try {
+                if (sessionStorage.getItem("access_token") !== null)
+                    return;
+                return this.loginRequest(user).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])((report) => {
+                    if (report.success) {
+                        sessionStorage.setItem("access_token", report.message);
+                    }
+                    else {
+                        throw new Error(report.message);
+                    }
+                }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["first"])()).toPromise();
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    handleError(error) {
+        if (error.error instanceof ErrorEvent) {
+            //client side error like lost connection
+            console.error('Error: ', error.error.message);
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])('<strong>Problem z połączeniem.</strong> Sprawdź swoje połączenie z internetem, lub sprubój ponownie później.');
+        }
+        else {
+            //backend returned error
+            console.error(`Backend returned code ${error.status}\n body was: ${error.error}`);
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])('<strong>Wystąpił problem.</strong> Spróbuj ponownie później');
+        }
+    }
+    //access token in message
+    loginRequest(user) {
+        let url = src_environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].endpoint + "/user/login";
+        const httpOptions = {
+            headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({
+                'Content-Type': 'application/json'
+            })
+        };
+        return this.http.post(url, user, httpOptions)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError));
+    }
+}
+OurUserService.ɵfac = function OurUserService_Factory(t) { return new (t || OurUserService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"])); };
+OurUserService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: OurUserService, factory: OurUserService.ɵfac, providedIn: 'root' });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵsetClassMetadata"](OurUserService, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"],
+        args: [{
+                providedIn: 'root'
+            }]
+    }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"] }]; }, null); })();
+
+
+/***/ }),
+
 /***/ "Ouoq":
 /*!*****************************************!*\
   !*** ./src/app/service/user.service.ts ***!
@@ -347,6 +440,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
 /* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/environments/environment */ "AytR");
 /* harmony import */ var _google_user_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./google-user.service */ "SAzt");
+/* harmony import */ var _our_user_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./our-user.service */ "Mg0x");
+
 
 
 
@@ -357,9 +452,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class UserService {
-    constructor(http, gu) {
+    constructor(http, gu, our) {
         this.http = http;
         this.gu = gu;
+        this.our = our;
         this.loggedMsg = new rxjs__WEBPACK_IMPORTED_MODULE_3__["BehaviorSubject"](this.loggedStatus);
     }
     get loggedStatus() {
@@ -397,13 +493,17 @@ class UserService {
         return this.http.post(url, user, httpOptions)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError));
     }
-    loginParser(ua) {
+    loginParser(ua, data = undefined) {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
             try {
                 switch (ua) {
                     case "google":
                         yield this.gu.login();
                         this.userAccount = this.gu;
+                        break;
+                    case "our":
+                        yield this.our.login(data);
+                        this.userAccount = this.our;
                         break;
                     default:
                         throw new Error("wrong login argument: " + ua);
@@ -437,10 +537,10 @@ class UserService {
             }
         });
     }
-    login(ua) {
+    login(ua, data = undefined) {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
             try {
-                yield this.loginParser(ua);
+                yield this.loginParser(ua, data);
                 this.loggedStatus = ua;
             }
             catch (error) {
@@ -477,14 +577,14 @@ class UserService {
         });
     }
 }
-UserService.ɵfac = function UserService_Factory(t) { return new (t || UserService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_google_user_service__WEBPACK_IMPORTED_MODULE_6__["GoogleUserService"])); };
+UserService.ɵfac = function UserService_Factory(t) { return new (t || UserService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_google_user_service__WEBPACK_IMPORTED_MODULE_6__["GoogleUserService"]), _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_our_user_service__WEBPACK_IMPORTED_MODULE_7__["OurUserService"])); };
 UserService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({ token: UserService, factory: UserService.ɵfac, providedIn: 'root' });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵsetClassMetadata"](UserService, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_2__["Injectable"],
         args: [{
                 providedIn: 'root'
             }]
-    }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"] }, { type: _google_user_service__WEBPACK_IMPORTED_MODULE_6__["GoogleUserService"] }]; }, null); })();
+    }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"] }, { type: _google_user_service__WEBPACK_IMPORTED_MODULE_6__["GoogleUserService"] }, { type: _our_user_service__WEBPACK_IMPORTED_MODULE_7__["OurUserService"] }]; }, null); })();
 
 
 /***/ }),
@@ -654,6 +754,34 @@ GoogleUserService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefin
 
 /***/ }),
 
+/***/ "SgNr":
+/*!*******************************************!*\
+  !*** ./src/app/service/error-handlers.ts ***!
+  \*******************************************/
+/*! exports provided: httpErrorHandler */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "httpErrorHandler", function() { return httpErrorHandler; });
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! rxjs */ "qCKp");
+
+function httpErrorHandler(error) {
+    if (error.error instanceof ErrorEvent) {
+        //client side error like lost connection
+        console.error('Error: ', error.error.message);
+        return Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["throwError"])('<strong>Problem z połączeniem.</strong> Sprawdź swoje połączenie z internetem, lub sprubój ponownie później.');
+    }
+    else {
+        //backend returned error
+        console.error(`Backend returned code ${error.status}\n body was: ${error.error}`);
+        return Object(rxjs__WEBPACK_IMPORTED_MODULE_0__["throwError"])('<strong>Wystąpił problem.</strong> Spróbuj ponownie później');
+    }
+}
+
+
+/***/ }),
+
 /***/ "Sqrs":
 /*!*********************************************************!*\
   !*** ./src/app/component/view/login/login.component.ts ***!
@@ -664,57 +792,108 @@ GoogleUserService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefin
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoginComponent", function() { return LoginComponent; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
-/* harmony import */ var _widget_google_login_google_login_component__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../widget/google-login/google-login.component */ "DNdf");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
+/* harmony import */ var src_app_service_message__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/service/message */ "Uxiq");
+/* harmony import */ var src_app_service_user_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/app/service/user.service */ "Ouoq");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common */ "ofXK");
+/* harmony import */ var _widget_google_login_google_login_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../widget/google-login/google-login.component */ "DNdf");
 
 
 
 
 
 
+
+
+
+
+function LoginComponent_div_3_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](0, "div", 7);
+} if (rf & 2) {
+    const ctx_r0 = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵnextContext"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵclassMap"](ctx_r0.message.class);
+    _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("innerHTML", ctx_r0.message.content, _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵsanitizeHtml"]);
+} }
 class LoginComponent {
-    constructor(fb) {
+    constructor(fb, userService, router) {
         this.fb = fb;
+        this.userService = userService;
+        this.router = router;
         this.form = this.fb.group({
-            login: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required],
-            password: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required]
+            login: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required],
+            password: ['', _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]
         });
+        this.message = new src_app_service_message__WEBPACK_IMPORTED_MODULE_3__["Message"]();
+    }
+    get login() {
+        return this.form.get("login");
+    }
+    get password() {
+        return this.form.get("password");
     }
     ngOnInit() {
     }
-    onSubmit() {
-        let password = this.form.get("password");
-        let login = this.form.get("login");
+    submitLogin() {
+        return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+            try {
+                if (this.password === null || this.login === null) {
+                    console.error("No field");
+                    return;
+                }
+                let password = this.password.value;
+                let login = this.login.value;
+                yield this.userService.login("our", { login: login, password: password });
+                this.router.navigate(["/konto_uzytkownika"]);
+            }
+            catch (error) {
+                let errorMessage = error;
+                if (error.message == "wrong login") {
+                    errorMessage = "<strong>Ups! pomyliłeś login</strong> Spróbuj wpisać go ponownie";
+                }
+                if (error.message == "wrong password") {
+                    errorMessage = "<strong>Ups! źle wpisałeś hasło</strong> Spróbuj wpisać nio ponownie albo skorzystaj z opcji zapomniałem hasła";
+                }
+                if (error.message == "internal error") {
+                    errorMessage = "<strong>Ups! Coś poszło nie tak.</strong> Sprubuj ponownie później.";
+                }
+                this.message.show(errorMessage, "danger");
+            }
+        });
     }
 }
-LoginComponent.ɵfac = function LoginComponent_Factory(t) { return new (t || LoginComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"])); };
-LoginComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: LoginComponent, selectors: [["app-login"]], decls: 9, vars: 1, consts: [[1, "container", "g-form", 3, "formGroup"], ["type", "text", "placeholder", "Login", "formControlName", "login", "required", "", 1, "form-control", "mb-1"], ["type", "password", "placeholder", "Has\u0142o", "formControlName", "password", "required", "", 1, "form-control", "mb-2"], ["type", "submit", 1, "btn", "btn-success", "w-100", "mb-2"], [1, "w-100", "mb-2"], ["routerLink", "/register", 1, "btn", "btn-primary", "w-100"]], template: function LoginComponent_Template(rf, ctx) { if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "form", 0);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](1, "input", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](2, "input", 2);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](3, "button", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](4, "Log in");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](5, "div", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](6, "app-google-login");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](7, "a", 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](8, "Register");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+LoginComponent.ɵfac = function LoginComponent_Factory(t) { return new (t || LoginComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](src_app_service_user_service__WEBPACK_IMPORTED_MODULE_4__["UserService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"])); };
+LoginComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineComponent"]({ type: LoginComponent, selectors: [["app-login"]], decls: 10, vars: 2, consts: [[1, "container", "g-form", 3, "formGroup"], ["type", "text", "placeholder", "Login", "formControlName", "login", "required", "", 1, "form-control", "mb-1"], ["type", "password", "placeholder", "Has\u0142o", "formControlName", "password", "required", "", 1, "form-control", "mb-2"], [3, "innerHTML", "class", 4, "ngIf"], [1, "btn", "btn-success", "w-100", "mb-2", 3, "click"], [1, "w-100", "mb-2"], ["routerLink", "/register", 1, "btn", "btn-primary", "w-100"], [3, "innerHTML"]], template: function LoginComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](0, "form", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](1, "input", 1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](2, "input", 2);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtemplate"](3, LoginComponent_div_3_Template, 1, 3, "div", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](4, "button", 4);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵlistener"]("click", function LoginComponent_Template_button_click_4_listener() { return ctx.submitLogin(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](5, "Log in");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](6, "div", 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelement"](7, "app-google-login");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementStart"](8, "a", 6);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵtext"](9, "Register");
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵelementEnd"]();
     } if (rf & 2) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("formGroup", ctx.form);
-    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_y"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControlName"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["RequiredValidator"], _widget_google_login_google_login_component__WEBPACK_IMPORTED_MODULE_2__["GoogleLoginComponent"], _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouterLinkWithHref"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJsb2dpbi5jb21wb25lbnQuc2NzcyJ9 */"] });
-/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](LoginComponent, [{
-        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("formGroup", ctx.form);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵadvance"](3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵproperty"]("ngIf", ctx.message.visible);
+    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["ɵangular_packages_forms_forms_y"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControlName"], _angular_forms__WEBPACK_IMPORTED_MODULE_2__["RequiredValidator"], _angular_common__WEBPACK_IMPORTED_MODULE_6__["NgIf"], _widget_google_login_google_login_component__WEBPACK_IMPORTED_MODULE_7__["GoogleLoginComponent"], _angular_router__WEBPACK_IMPORTED_MODULE_5__["RouterLinkWithHref"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJsb2dpbi5jb21wb25lbnQuc2NzcyJ9 */"] });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](LoginComponent, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"],
         args: [{
                 selector: 'app-login',
                 templateUrl: './login.component.html',
                 styleUrls: ['./login.component.scss']
             }]
-    }], function () { return [{ type: _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"] }]; }, null); })();
+    }], function () { return [{ type: _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormBuilder"] }, { type: src_app_service_user_service__WEBPACK_IMPORTED_MODULE_4__["UserService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"] }]; }, null); })();
 
 
 /***/ }),
@@ -836,11 +1015,12 @@ HomeComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComp
 /*!*******************************!*\
   !*** ./src/app/app.module.ts ***!
   \*******************************/
-/*! exports provided: AppModule */
+/*! exports provided: tokkenGetter, AppModule */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tokkenGetter", function() { return tokkenGetter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppModule", function() { return AppModule; });
 /* harmony import */ var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/platform-browser */ "jhN1");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "fXoL");
@@ -863,6 +1043,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _component_view_page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./component/view/page-not-found/page-not-found.component */ "1YpU");
 /* harmony import */ var _component_widget_google_login_google_login_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./component/widget/google-login/google-login.component */ "DNdf");
 /* harmony import */ var _component_view_konto_uzytkownika_konto_uzytkownika_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./component/view/konto-uzytkownika/konto-uzytkownika.component */ "1N6X");
+/* harmony import */ var _auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @auth0/angular-jwt */ "Nm8O");
+/* harmony import */ var _component_view_wyslano_email_weryfikacyjny_wyslano_email_weryfikacyjny_component__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./component/view/wyslano-email-weryfikacyjny/wyslano-email-weryfikacyjny.component */ "u7ZG");
+/* harmony import */ var _component_view_weryfikuj_weryfikuj_component__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./component/view/weryfikuj/weryfikuj.component */ "kTzx");
 
 
 
@@ -885,6 +1068,13 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+
+
+
+function tokkenGetter() {
+    return sessionStorage.getItem("access_token");
+}
 class AppModule {
 }
 AppModule.ɵmod = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineNgModule"]({ type: AppModule, bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]] });
@@ -893,7 +1083,12 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector
             _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClientModule"],
             _app_routing_module__WEBPACK_IMPORTED_MODULE_4__["AppRoutingModule"],
             _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__["NgbModule"],
-            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"]
+            _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"],
+            _auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_21__["JwtModule"].forRoot({
+                config: {
+                    tokenGetter: tokkenGetter,
+                }
+            }),
         ]] });
 (function () { (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵsetNgModuleScope"](AppModule, { declarations: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"],
         _component_widget_product_nav_product_nav_component__WEBPACK_IMPORTED_MODULE_7__["ProductNavComponent"],
@@ -909,11 +1104,13 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector
         _component_view_home_home_component__WEBPACK_IMPORTED_MODULE_17__["HomeComponent"],
         _component_view_page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_18__["PageNotFoundComponent"],
         _component_widget_google_login_google_login_component__WEBPACK_IMPORTED_MODULE_19__["GoogleLoginComponent"],
-        _component_view_konto_uzytkownika_konto_uzytkownika_component__WEBPACK_IMPORTED_MODULE_20__["KontoUzytkownikaComponent"]], imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
+        _component_view_konto_uzytkownika_konto_uzytkownika_component__WEBPACK_IMPORTED_MODULE_20__["KontoUzytkownikaComponent"],
+        _component_view_wyslano_email_weryfikacyjny_wyslano_email_weryfikacyjny_component__WEBPACK_IMPORTED_MODULE_22__["WyslanoEmailWeryfikacyjnyComponent"],
+        _component_view_weryfikuj_weryfikuj_component__WEBPACK_IMPORTED_MODULE_23__["WeryfikujComponent"]], imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
         _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClientModule"],
         _app_routing_module__WEBPACK_IMPORTED_MODULE_4__["AppRoutingModule"],
         _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__["NgbModule"],
-        _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"]] }); })();
+        _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"], _auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_21__["JwtModule"]] }); })();
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵsetClassMetadata"](AppModule, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"],
         args: [{
@@ -932,14 +1129,21 @@ AppModule.ɵinj = _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector
                     _component_view_home_home_component__WEBPACK_IMPORTED_MODULE_17__["HomeComponent"],
                     _component_view_page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_18__["PageNotFoundComponent"],
                     _component_widget_google_login_google_login_component__WEBPACK_IMPORTED_MODULE_19__["GoogleLoginComponent"],
-                    _component_view_konto_uzytkownika_konto_uzytkownika_component__WEBPACK_IMPORTED_MODULE_20__["KontoUzytkownikaComponent"]
+                    _component_view_konto_uzytkownika_konto_uzytkownika_component__WEBPACK_IMPORTED_MODULE_20__["KontoUzytkownikaComponent"],
+                    _component_view_wyslano_email_weryfikacyjny_wyslano_email_weryfikacyjny_component__WEBPACK_IMPORTED_MODULE_22__["WyslanoEmailWeryfikacyjnyComponent"],
+                    _component_view_weryfikuj_weryfikuj_component__WEBPACK_IMPORTED_MODULE_23__["WeryfikujComponent"]
                 ],
                 imports: [
                     _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
                     _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClientModule"],
                     _app_routing_module__WEBPACK_IMPORTED_MODULE_4__["AppRoutingModule"],
                     _ng_bootstrap_ng_bootstrap__WEBPACK_IMPORTED_MODULE_6__["NgbModule"],
-                    _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"]
+                    _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"],
+                    _auth0_angular_jwt__WEBPACK_IMPORTED_MODULE_21__["JwtModule"].forRoot({
+                        config: {
+                            tokenGetter: tokkenGetter,
+                        }
+                    }),
                 ],
                 providers: [],
                 bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_5__["AppComponent"]]
@@ -1021,6 +1225,124 @@ AuthGuard.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjecta
                 providedIn: 'root'
             }]
     }], function () { return [{ type: _service_user_service__WEBPACK_IMPORTED_MODULE_1__["UserService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"] }]; }, null); })();
+
+
+/***/ }),
+
+/***/ "kTzx":
+/*!*****************************************************************!*\
+  !*** ./src/app/component/view/weryfikuj/weryfikuj.component.ts ***!
+  \*****************************************************************/
+/*! exports provided: WeryfikujComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WeryfikujComponent", function() { return WeryfikujComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var src_app_service_message__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/app/service/message */ "Uxiq");
+/* harmony import */ var src_app_service_verification_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/service/verification.service */ "lroY");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ "ofXK");
+
+
+
+
+
+
+function WeryfikujComponent_div_0_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelement"](0, "div", 2);
+} if (rf & 2) {
+    const ctx_r0 = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵnextContext"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵclassMap"](ctx_r0.message.class);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("innerHTML", ctx_r0.message.content, _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵsanitizeHtml"]);
+} }
+function WeryfikujComponent_a_1_Template(rf, ctx) { if (rf & 1) {
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "a", 3);
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](1, "Logowanie");
+    _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+} }
+class WeryfikujComponent {
+    constructor(vs, ac) {
+        this.vs = vs;
+        this.ac = ac;
+        this.message = new src_app_service_message__WEBPACK_IMPORTED_MODULE_1__["Message"]();
+    }
+    ngOnInit() {
+        this.vs.verify(this.ac.snapshot.params.code).subscribe((response) => {
+            if (response.success) {
+                this.message.show("<strong>Sukces!</strong> Twoje konto zostało pomyślnie zweryfikowane.", "success");
+                this.verified = true;
+            }
+            else if (response.message === "link not exist")
+                this.message.show("<strong>Błąd!</strong> Ten link prawdopodobnie wygasł, zarejestruj się ponownie", "danger");
+            else
+                this.message.show("<strong>Ups! Coś poszło nie tak.</strong> Sprubuj ponownie później.", "danger");
+        }, (error) => {
+            this.message.show(error, "danger");
+        });
+    }
+}
+WeryfikujComponent.ɵfac = function WeryfikujComponent_Factory(t) { return new (t || WeryfikujComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_service_verification_service__WEBPACK_IMPORTED_MODULE_2__["VerificationService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"])); };
+WeryfikujComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: WeryfikujComponent, selectors: [["app-weryfikuj"]], decls: 2, vars: 2, consts: [[3, "innerHTML", "class", 4, "ngIf"], ["class", "btn btn-info", "routerLink", "/login", 4, "ngIf"], [3, "innerHTML"], ["routerLink", "/login", 1, "btn", "btn-info"]], template: function WeryfikujComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](0, WeryfikujComponent_div_0_Template, 1, 3, "div", 0);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtemplate"](1, WeryfikujComponent_a_1_Template, 2, 0, "a", 1);
+    } if (rf & 2) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx.message.visible);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx.verified);
+    } }, directives: [_angular_common__WEBPACK_IMPORTED_MODULE_4__["NgIf"], _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouterLinkWithHref"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJ3ZXJ5ZmlrdWouY29tcG9uZW50LnNjc3MifQ== */"] });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](WeryfikujComponent, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
+        args: [{
+                selector: 'app-weryfikuj',
+                templateUrl: './weryfikuj.component.html',
+                styleUrls: ['./weryfikuj.component.scss']
+            }]
+    }], function () { return [{ type: src_app_service_verification_service__WEBPACK_IMPORTED_MODULE_2__["VerificationService"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"] }]; }, null); })();
+
+
+/***/ }),
+
+/***/ "lroY":
+/*!*************************************************!*\
+  !*** ./src/app/service/verification.service.ts ***!
+  \*************************************************/
+/*! exports provided: VerificationService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VerificationService", function() { return VerificationService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
+/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/environments/environment */ "AytR");
+/* harmony import */ var _error_handlers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./error-handlers */ "SgNr");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
+
+
+
+//import * as eh from './error-handlers';
+
+
+
+class VerificationService {
+    constructor(http) {
+        this.http = http;
+    }
+    verify(code) {
+        let url = src_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].endpoint + "/user/verify/" + code;
+        return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["catchError"])(_error_handlers__WEBPACK_IMPORTED_MODULE_3__["httpErrorHandler"]));
+    }
+}
+VerificationService.ɵfac = function VerificationService_Factory(t) { return new (t || VerificationService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClient"])); };
+VerificationService.ɵprov = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjectable"]({ token: VerificationService, factory: VerificationService.ɵfac, providedIn: 'root' });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](VerificationService, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"],
+        args: [{
+                providedIn: 'root'
+            }]
+    }], function () { return [{ type: _angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClient"] }]; }, null); })();
 
 
 /***/ }),
@@ -1130,8 +1452,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "3Pt+");
 /* harmony import */ var src_app_service_message__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/app/service/message */ "Uxiq");
 /* harmony import */ var src_app_service_user_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/service/user.service */ "Ouoq");
-/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common */ "ofXK");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "tyNb");
+/* harmony import */ var _angular_common__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common */ "ofXK");
 
 
 
@@ -1188,9 +1510,10 @@ function RegisterComponent_div_22_Template(rf, ctx) { if (rf & 1) {
     _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("innerHTML", ctx_r8.message.content, _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵsanitizeHtml"]);
 } }
 class RegisterComponent {
-    constructor(userService, fb) {
+    constructor(userService, fb, router) {
         this.userService = userService;
         this.fb = fb;
+        this.router = router;
         this.form = this.fb.group({
             login: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].maxLength(32)]],
             email: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].pattern(/^\S+@\S+\.\S+$/), _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].maxLength(64)]],
@@ -1230,6 +1553,7 @@ class RegisterComponent {
             this.userService.register(user).subscribe((result) => {
                 if (result.success) {
                     console.log(result);
+                    this.router.navigate(["/wyslano_email_weryfikacyjny"]);
                 }
                 else {
                     let errorMessage = "<strong>Ups! Coś poszło nie tak.</strong> Sprubuj ponownie później.";
@@ -1253,7 +1577,7 @@ class RegisterComponent {
         }
     }
 }
-RegisterComponent.ɵfac = function RegisterComponent_Factory(t) { return new (t || RegisterComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_service_user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"])); };
+RegisterComponent.ɵfac = function RegisterComponent_Factory(t) { return new (t || RegisterComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_service_user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"])); };
 RegisterComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: RegisterComponent, selectors: [["app-register"]], decls: 27, vars: 11, consts: [[1, "container", "g-form", 3, "formGroup", "ngSubmit"], [1, "form-group"], ["type", "text", "placeholder", "Login", "formControlName", "login", "required", "", 1, "form-control"], [1, "invalid-feedback"], [4, "ngIf"], ["type", "email", "placeholder", "Email", "formControlName", "email", "required", "", 1, "form-control"], ["type", "password", "placeholder", "Has\u0142o", "formControlName", "password", "required", "", 1, "form-control"], ["type", "password", "placeholder", "Powt\u00F3rz Has\u0142o", "formControlName", "rpassword", "required", "", 1, "form-control"], [3, "innerHTML", "class", 4, "ngIf"], ["type", "submit", 1, "btn", "btn-success", "w-100", "mb-1", 3, "disabled"], ["routerLink", "/login", 1, "btn", "btn-primary", "w-100"], [3, "innerHTML"]], template: function RegisterComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "form", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("ngSubmit", function RegisterComponent_Template_form_ngSubmit_0_listener() { return ctx.onSubmit(); });
@@ -1316,7 +1640,7 @@ RegisterComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefine
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("ngIf", ctx.message.visible);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵadvance"](1);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵproperty"]("disabled", !ctx.form.valid);
-    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_y"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControlName"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["RequiredValidator"], _angular_common__WEBPACK_IMPORTED_MODULE_4__["NgIf"], _angular_router__WEBPACK_IMPORTED_MODULE_5__["RouterLinkWithHref"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJyZWdpc3Rlci5jb21wb25lbnQuc2NzcyJ9 */"] });
+    } }, directives: [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["ɵangular_packages_forms_forms_y"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatusGroup"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroupDirective"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["DefaultValueAccessor"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["NgControlStatus"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControlName"], _angular_forms__WEBPACK_IMPORTED_MODULE_1__["RequiredValidator"], _angular_common__WEBPACK_IMPORTED_MODULE_5__["NgIf"], _angular_router__WEBPACK_IMPORTED_MODULE_4__["RouterLinkWithHref"]], styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJyZWdpc3Rlci5jb21wb25lbnQuc2NzcyJ9 */"] });
 /*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](RegisterComponent, [{
         type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
         args: [{
@@ -1324,7 +1648,43 @@ RegisterComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefine
                 templateUrl: './register.component.html',
                 styleUrls: ['./register.component.scss']
             }]
-    }], function () { return [{ type: src_app_service_user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"] }, { type: _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"] }]; }, null); })();
+    }], function () { return [{ type: src_app_service_user_service__WEBPACK_IMPORTED_MODULE_3__["UserService"] }, { type: _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormBuilder"] }, { type: _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"] }]; }, null); })();
+
+
+/***/ }),
+
+/***/ "u7ZG":
+/*!*****************************************************************************************************!*\
+  !*** ./src/app/component/view/wyslano-email-weryfikacyjny/wyslano-email-weryfikacyjny.component.ts ***!
+  \*****************************************************************************************************/
+/*! exports provided: WyslanoEmailWeryfikacyjnyComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "WyslanoEmailWeryfikacyjnyComponent", function() { return WyslanoEmailWeryfikacyjnyComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "fXoL");
+
+
+class WyslanoEmailWeryfikacyjnyComponent {
+    constructor() { }
+    ngOnInit() {
+    }
+}
+WyslanoEmailWeryfikacyjnyComponent.ɵfac = function WyslanoEmailWeryfikacyjnyComponent_Factory(t) { return new (t || WyslanoEmailWeryfikacyjnyComponent)(); };
+WyslanoEmailWeryfikacyjnyComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: WyslanoEmailWeryfikacyjnyComponent, selectors: [["app-wyslano-email-weryfikacyjny"]], decls: 2, vars: 0, template: function WyslanoEmailWeryfikacyjnyComponent_Template(rf, ctx) { if (rf & 1) {
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "h1");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](1, "Wys\u0142ano email z linkiem weryfikacyjnym!");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
+    } }, styles: ["\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJ3eXNsYW5vLWVtYWlsLXdlcnlmaWthY3lqbnkuY29tcG9uZW50LnNjc3MifQ== */"] });
+/*@__PURE__*/ (function () { _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵsetClassMetadata"](WyslanoEmailWeryfikacyjnyComponent, [{
+        type: _angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"],
+        args: [{
+                selector: 'app-wyslano-email-weryfikacyjny',
+                templateUrl: './wyslano-email-weryfikacyjny.component.html',
+                styleUrls: ['./wyslano-email-weryfikacyjny.component.scss']
+            }]
+    }], function () { return []; }, null); })();
 
 
 /***/ }),
@@ -1350,8 +1710,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _component_view_przesylki_zagraniczne_przesylki_zagraniczne_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./component/view/przesylki-zagraniczne/przesylki-zagraniczne.component */ "S9zC");
 /* harmony import */ var _component_view_register_register_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./component/view/register/register.component */ "r9bT");
 /* harmony import */ var _component_view_regulamin_regulamin_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./component/view/regulamin/regulamin.component */ "AxgZ");
-/* harmony import */ var _guard_antiauth_guard__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./guard/antiauth.guard */ "bE47");
-/* harmony import */ var _guard_auth_guard__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./guard/auth.guard */ "cT6d");
+/* harmony import */ var _component_view_weryfikuj_weryfikuj_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./component/view/weryfikuj/weryfikuj.component */ "kTzx");
+/* harmony import */ var _component_view_wyslano_email_weryfikacyjny_wyslano_email_weryfikacyjny_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./component/view/wyslano-email-weryfikacyjny/wyslano-email-weryfikacyjny.component */ "u7ZG");
+/* harmony import */ var _guard_antiauth_guard__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./guard/antiauth.guard */ "bE47");
+/* harmony import */ var _guard_auth_guard__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./guard/auth.guard */ "cT6d");
+
+
 
 
 
@@ -1373,9 +1737,11 @@ const routes = [
     { path: 'kontakt', component: _component_view_kontakt_kontakt_component__WEBPACK_IMPORTED_MODULE_4__["KontaktComponent"] },
     { path: 'przesylki_zagraniczne', component: _component_view_przesylki_zagraniczne_przesylki_zagraniczne_component__WEBPACK_IMPORTED_MODULE_8__["PrzesylkiZagraniczneComponent"] },
     { path: 'regulamin', component: _component_view_regulamin_regulamin_component__WEBPACK_IMPORTED_MODULE_10__["RegulaminComponent"] },
-    { path: 'login', component: _component_view_login_login_component__WEBPACK_IMPORTED_MODULE_6__["LoginComponent"], canActivate: [_guard_antiauth_guard__WEBPACK_IMPORTED_MODULE_11__["AntiauthGuard"]] },
-    { path: 'register', component: _component_view_register_register_component__WEBPACK_IMPORTED_MODULE_9__["RegisterComponent"], canActivate: [_guard_antiauth_guard__WEBPACK_IMPORTED_MODULE_11__["AntiauthGuard"]] },
-    { path: 'konto_uzytkownika', component: _component_view_konto_uzytkownika_konto_uzytkownika_component__WEBPACK_IMPORTED_MODULE_5__["KontoUzytkownikaComponent"], canActivate: [_guard_auth_guard__WEBPACK_IMPORTED_MODULE_12__["AuthGuard"]] },
+    { path: 'login', component: _component_view_login_login_component__WEBPACK_IMPORTED_MODULE_6__["LoginComponent"], canActivate: [_guard_antiauth_guard__WEBPACK_IMPORTED_MODULE_13__["AntiauthGuard"]] },
+    { path: 'register', component: _component_view_register_register_component__WEBPACK_IMPORTED_MODULE_9__["RegisterComponent"], canActivate: [_guard_antiauth_guard__WEBPACK_IMPORTED_MODULE_13__["AntiauthGuard"]] },
+    { path: 'konto_uzytkownika', component: _component_view_konto_uzytkownika_konto_uzytkownika_component__WEBPACK_IMPORTED_MODULE_5__["KontoUzytkownikaComponent"], canActivate: [_guard_auth_guard__WEBPACK_IMPORTED_MODULE_14__["AuthGuard"]] },
+    { path: 'wyslano_email_weryfikacyjny', component: _component_view_wyslano_email_weryfikacyjny_wyslano_email_weryfikacyjny_component__WEBPACK_IMPORTED_MODULE_12__["WyslanoEmailWeryfikacyjnyComponent"] },
+    { path: 'weryfikuj/:code', component: _component_view_weryfikuj_weryfikuj_component__WEBPACK_IMPORTED_MODULE_11__["WeryfikujComponent"] },
     { path: '**', component: _component_view_page_not_found_page_not_found_component__WEBPACK_IMPORTED_MODULE_7__["PageNotFoundComponent"] },
 ];
 class AppRoutingModule {

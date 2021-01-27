@@ -22,7 +22,7 @@ module.exports = {
         verified: {type: Boolean, default: false},
         link: {
             address: {type: String, unique: true},
-            crtDate: {type: Date, expires: 60, default: Date.now},
+            crtDate: {type: Date, expires: 3600*24, default: Date.now},
         },
         password: "string",
     }, {
@@ -59,9 +59,9 @@ module.exports = {
                         };
                     }
                     
-                    //register user
                     const hash = await argon2.hash(ctx.params.password);
                     const link = Str.random(64);
+                    //insert user
                     this.adapter.insert({
                         login: ctx.params.login,
                         email: ctx.params.email,
@@ -71,8 +71,8 @@ module.exports = {
                         password: hash,
                     });
 
-                    //send authentification mail
                     try{
+                        //send authentification mail
                         let mail = await this.sendMail(ctx.params.email, link);
                         this.broker.logger.info( mail );
                     } catch(err) {
@@ -101,18 +101,36 @@ module.exports = {
                 link: "string",
             },
             async handler(ctx) {
-                const account = await this.adapter.find({
-                    query: {"link.address": ctx.params.link}
-                });
-                if(account.length === 0)
+                try {
+                    const account = await this.adapter.find({
+                        query: {"link.address": ctx.params.link}
+                    });
+                    if(account.length === 0)
+                    {
+                        return {
+                            action: "verify",
+                            success: false,
+                            message: "link not exist"
+                        };
+                    }
+                    await this.adapter.updateById(account[0]._id, {
+                        verified: true,
+                        $unset: {link: ""},
+                    });
+                    return {
+                        action: "verify",
+                        success: true,
+                        message: ""
+                    }
+                } catch( error )
                 {
-                    throw new ServiceNotFoundError();
+                    this.broker.logger.error( err );
+                    return {
+                        action: "verify",
+                        success: false,
+                        message: "internal error",
+                    }
                 }
-                const response = await this.adapter.updateById(account[0]._id, {
-                    verified: true,
-                    $unset: {link: ""},
-                });
-                return response;
             }
         },
 
@@ -137,7 +155,7 @@ module.exports = {
                     };
                 }
                 try {
-                    if (!await argon2.verify(user.password, password)) {
+                    if (!await argon2.verify(user[0].password, password)) {
                         return {
                             action: "login",
                             success: false,
@@ -145,6 +163,7 @@ module.exports = {
                         };
                     }
                 } catch (err) {
+                    this.broker.logger.error( err );
                     return {
                         action: "login",
                         success: false,
@@ -158,7 +177,9 @@ module.exports = {
                     message: token
                 };
             }
-        }
+        },
+
+        //name
     },
 
     methods: {
@@ -166,7 +187,7 @@ module.exports = {
             return this.broker.call("mail.send", {
                 to: address, 
                 subject: "Weryfikacja", 
-                html: `<a href="https://localhost:3000/api/user/verify/${link}">Aktywuj!</a>`,
+                html: `<a href="https://localhost:3000/weryfikuj/${link}">Aktywuj!</a>`,
             });
         },
     }
