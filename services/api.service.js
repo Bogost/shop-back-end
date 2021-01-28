@@ -2,6 +2,8 @@
 
 const ApiGateway = require("moleculer-web");
 const fs = require("fs");
+const jwt = require('jsonwebtoken');
+const secrets = require("../secret/secrets");
 
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
@@ -44,10 +46,10 @@ module.exports = {
 				mergeParams: true,
 
 				// Enable authentication. Implement the logic into `authenticate` method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Authentication
-				authentication: false,
+				authentication: true,
 
 				// Enable authorization. Implement the logic into `authorize` method. More info: https://moleculer.services/docs/0.14/moleculer-web.html#Authorization
-				authorization: false,
+				authorization: true,
 
 				// The auto-alias feature allows you to declare your route alias directly in your services.
 				// The gateway will dynamically build the full routes from service schema.
@@ -142,8 +144,6 @@ module.exports = {
 		 * Check the token value & resolve the user by the token.
 		 * The resolved user will be available in `ctx.meta.user`
 		 *
-		 * PLEASE NOTE, IT'S JUST AN EXAMPLE IMPLEMENTATION. DO NOT USE IN PRODUCTION!
-		 *
 		 * @param {Context} ctx
 		 * @param {Object} route
 		 * @param {IncomingRequest} req
@@ -155,17 +155,15 @@ module.exports = {
 
 			if (auth && auth.startsWith("Bearer")) {
 				const token = auth.slice(7);
-
-				// Check the token. Tip: call a service which verify the token. E.g. `accounts.resolveToken`
-				if (token == "123456") {
+				try {
+					let decoded = jwt.verify(token, secrets.tokenSecret);
 					// Returns the resolved user. It will be set to the `ctx.meta.user`
-					return { id: 1, name: "John Doe" };
-
-				} else {
-					// Invalid token
+					return {name: decoded.sub};
+				} catch( error ) {
+					this.broker.logger.error(error);
+					//invalid token
 					throw new ApiGateway.Errors.UnAuthorizedError(ApiGateway.Errors.ERR_INVALID_TOKEN);
 				}
-
 			} else {
 				// No token. Throw an error or do nothing if anonymous access is allowed.
 				// throw new E.UnAuthorizedError(E.ERR_NO_TOKEN);
@@ -186,10 +184,14 @@ module.exports = {
 		async authorize(ctx, route, req) {
 			// Get the authenticated user.
 			const user = ctx.meta.user;
-
 			// It check the `auth` property in action schema.
-			if (req.$action.auth == "required" && !user) {
-				throw new ApiGateway.Errors.UnAuthorizedError("NO_RIGHTS");
+			if (req.$action.auth == "required") {
+				if(!user)
+					throw new ApiGateway.Errors.UnAuthorizedError("NO_RIGHTS");
+				let v = await ctx.call("user.authorize");
+				this.broker.logger.info("v: " + v);
+				if(!v)
+					throw new ApiGateway.Errors.UnAuthorizedError("NO_RIGHTS");
 			}
 		}
 

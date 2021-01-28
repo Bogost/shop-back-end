@@ -99,7 +99,12 @@ class KontoUzytkownikaComponent {
     }
     ngOnInit() {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            this.name = yield this.userService.getUserName();
+            try {
+                this.name = yield this.userService.getUserName();
+            }
+            catch (error) {
+                console.error(error);
+            }
             console.log(this.name);
         });
     }
@@ -343,9 +348,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "mrSG");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/common/http */ "tk/3");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/core */ "fXoL");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "qCKp");
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
-/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/environments/environment */ "AytR");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs/operators */ "kU1M");
+/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/environments/environment */ "AytR");
+/* harmony import */ var _error_handlers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./error-handlers */ "SgNr");
 
 
 
@@ -360,7 +365,9 @@ class OurUserService {
     }
     getName() {
         return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-            return "Alfred";
+            let name = "";
+            yield this.nameRequest().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["tap"])((n) => name = n), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["first"])()).toPromise();
+            return name;
         });
     }
     logout() {
@@ -373,42 +380,35 @@ class OurUserService {
             try {
                 if (sessionStorage.getItem("access_token") !== null)
                     return;
-                return this.loginRequest(user).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["tap"])((report) => {
+                return this.loginRequest(user).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["tap"])((report) => {
                     if (report.success) {
                         sessionStorage.setItem("access_token", report.message);
                     }
                     else {
                         throw new Error(report.message);
                     }
-                }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["first"])()).toPromise();
+                }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["first"])()).toPromise();
             }
             catch (error) {
                 throw error;
             }
         });
     }
-    handleError(error) {
-        if (error.error instanceof ErrorEvent) {
-            //client side error like lost connection
-            console.error('Error: ', error.error.message);
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])('<strong>Problem z połączeniem.</strong> Sprawdź swoje połączenie z internetem, lub sprubój ponownie później.');
-        }
-        else {
-            //backend returned error
-            console.error(`Backend returned code ${error.status}\n body was: ${error.error}`);
-            return Object(rxjs__WEBPACK_IMPORTED_MODULE_3__["throwError"])('<strong>Wystąpił problem.</strong> Spróbuj ponownie później');
-        }
-    }
     //access token in message
     loginRequest(user) {
-        let url = src_environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].endpoint + "/user/login";
+        let url = src_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].endpoint + "/user/login";
         const httpOptions = {
             headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpHeaders"]({
                 'Content-Type': 'application/json'
             })
         };
         return this.http.post(url, user, httpOptions)
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.handleError));
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(_error_handlers__WEBPACK_IMPORTED_MODULE_5__["httpErrorHandler"]));
+    }
+    //to refactor
+    nameRequest() {
+        let url = src_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].endpoint + "/user/name";
+        return this.http.get(url).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(_error_handlers__WEBPACK_IMPORTED_MODULE_5__["httpErrorHandler"]));
     }
 }
 OurUserService.ɵfac = function OurUserService_Factory(t) { return new (t || OurUserService)(_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_1__["HttpClient"])); };
@@ -1322,7 +1322,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-//import * as eh from './error-handlers';
 
 
 

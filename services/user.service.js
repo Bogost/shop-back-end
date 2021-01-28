@@ -29,7 +29,17 @@ module.exports = {
         timestamps: true,
     })),
 
+    dependencies: [
+        "mail"
+    ],
+
     actions: {
+        list: false,
+        create: false,
+        get: false,
+        update: false,
+        remove: false,
+
         register: {
             rest: "POST register",
             params: {
@@ -179,7 +189,34 @@ module.exports = {
             }
         },
 
-        //name
+        authorize: {
+            visibility: "public", //check protected
+            async handler(ctx) {
+                let name = ctx.meta.user?.name;
+                this.broker.logger.info("name: " + name);
+                try {
+                    const l = await this.adapter.count({query: {login: name}});
+                    if(l >= 1)
+                    {
+                        return true;
+                    }
+                    return false;
+                } catch( error ) {
+                    this.broker.logger.error(error);
+                    ctx.meta.verify = false;
+                    return false;
+                }
+            }
+        },
+
+        //basicly auth here is for test purposes
+        name: {
+            rest: "GET name",
+            auth: "required",
+            async handler(ctx) {
+                return ctx.meta.user.name;
+            }
+        },
     },
 
     methods: {
